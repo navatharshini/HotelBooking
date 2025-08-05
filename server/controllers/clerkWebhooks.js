@@ -6,8 +6,8 @@ try{
 const whook=new Webhook (proces.env.CLERK_WEBHOOK_SECRET)
 const headers={
 "svix-id" : req.headers["svix-id"] ,
-"svix-timestamp" :req.header["svix-timestamp"],
-"svix-signature" :req.header["svix-signature"],
+"svix-timestamp" :req.headers["svix-timestamp"],
+"svix-signature" :req.headers["svix-signature"],
 
 };
 
@@ -32,12 +32,12 @@ switch(type){
 
     }
     case "user.updated":{
-        await User.findByIdAndUpdte(data.id ,userdata);
+        await User.findByIdAndUpdate(data.id ,userdata);
         break;
 
     }
     case "user.deleted":{
-        await User.findByIdAndUpdte(data.id);
+        await User.findByIdAndUpdate(data.id);
         break;
 
     }
