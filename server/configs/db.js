@@ -1,13 +1,18 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import 'dotenv/config'; // Ensure this is at the top
 
-const connectDB= async () =>{
-    try{
-        mongoose.connection.on('connected',()=>console.log("DataBase Connected")
-        );
-await mongoose.connect(`${process.env.  MONGODB_URL}/hotel-booking`)
-    }catch(error){
-console.log(error.message);
-    }
-}
+const connectDB = async () => {
+  try {
+    // Debug: Log the connection string (remove after verification)
+    console.log('Connecting to:', process.env.MONGO_URI); 
+    
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`❌ MongoDB Connection Error: ${error.message}`);
+    process.exit(1);
+  }
+};
 
 export default connectDB;
