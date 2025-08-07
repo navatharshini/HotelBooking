@@ -21,13 +21,15 @@ connectCloudinary();
 const app = express();
 
 app.use(cors());
+
+// Use express.raw to get the raw body for webhook verification
+// This route must be before express.json()
+app.post("/api/clerk", express.raw({ type: "application/json" }), clerkWebhooks);
+
 app.use(express.json());
 
 // ✅ Clerk middleware (global) — sets req.auth
 app.use(clerkMiddleware());
-
-// ✅ Skip auth for webhook route
-app.use("/api/clerk", clerkWebhooks);
 
 // ✅ Auth-protected test route
 app.get("/api/test-auth", requireAuth(), (req, res) => {
