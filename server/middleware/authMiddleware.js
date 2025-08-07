@@ -1,15 +1,17 @@
-import User from "../models/User.js";
+import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 
-// Middleware to check if user is authenticated 
+export const protect = ClerkExpressWithAuth({
+  onError: (err, req, res, next) => {
+    res.status(401).json({ message: "Not authorized" });
+  },
+  onSuccess: async (req, res, next) => {
+    const { userId } = req.auth;
 
-export const protect = async(req,res,next)=>{
-const {userId} =req.auth;
-if(userId){
-    res.json({success : false ,message:"not authenticated"})
-}
-else{
-    const user=await User.findById(userId);
-    req.user=user;
-    next()
-}
-}
+    if (!userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    req.userId = userId;
+    next();
+  }
+});
